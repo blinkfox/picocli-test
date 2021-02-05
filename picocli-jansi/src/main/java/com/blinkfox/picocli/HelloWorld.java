@@ -21,6 +21,17 @@ import picocli.CommandLine;
 public class HelloWorld implements Callable<Integer> {
 
     /**
+     * 是否可查看帮助信息.
+     */
+    @CommandLine.Option(names = {"-h", "-H", "--help"}, usageHelp = true,
+            description = "@|cyan Display help information|@")
+    boolean help;
+
+    @CommandLine.Option(names = {"-v", "-V", "--version"}, versionHelp = true,
+            description = "@|cyan Display version information|@")
+    boolean version;
+
+    /**
      * Computes a result, or throws an exception if unable to do so.
      *
      * @return computed result
@@ -28,11 +39,9 @@ public class HelloWorld implements Callable<Integer> {
      */
     @Override
     public Integer call() throws Exception {
-        AnsiConsole.systemInstall();
         System.out.println(CommandLine.Help.Ansi.AUTO.string("@|bold,green ------------|@"));
         System.out.println(CommandLine.Help.Ansi.AUTO.string("@|red Hello|@ @|cyan World|@"));
         System.out.println(CommandLine.Help.Ansi.AUTO.string("@|bold,green ------------|@"));
-        AnsiConsole.systemUninstall();
         return 0;
     }
 
@@ -42,7 +51,9 @@ public class HelloWorld implements Callable<Integer> {
      * @param args 数组
      */
     public static void main(String... args) {
+        AnsiConsole.systemInstall();
         int exitCode = new CommandLine(new HelloWorld()).execute(args);
+        AnsiConsole.systemUninstall();
         System.exit(exitCode);
     }
 
